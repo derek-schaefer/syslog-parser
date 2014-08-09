@@ -1,6 +1,6 @@
 module Main where
 
-import Text.Syslog.Types
+import Text.Syslog
 import Text.Syslog.RFC3164 as RFC3164
 
 import qualified Data.Text as T
@@ -19,8 +19,9 @@ parseLines reader = do
     [] -> return ()
     _  -> do
       case (reader src) of
-        Just e -> do
+        Nothing -> putStrLn ""
+        Just e  -> do
              putStrLn $ show e
              putStrLn $ show $ showEvent e
-             putStrLn "\n"
+             putStrLn ""
       parseLines reader

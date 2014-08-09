@@ -72,13 +72,11 @@ parseContent = do
   msg  <- takeText
   return $ Content tag' pid' msg
 
-timestampFormat :: String
-timestampFormat = "%b %e %H:%M:%S"
-
 parseTimestamp :: Parser UTCTime
 parseTimestamp = do
   time <- count 15 anyChar
-  return $ fromJust $ parseTime defaultTimeLocale timestampFormat time
+  let time' = parseTime defaultTimeLocale timestampFormat time
+  maybe (fail "invalid timestamp") return time'
 
 readFacility :: Int -> Facility
 readFacility pri = toEnum $ pri `div` 8
@@ -101,3 +99,6 @@ contentStr c = foldl1 T.append [t, p, ":", message c]
 
 timestampStr :: UTCTime -> String
 timestampStr t = formatTime defaultTimeLocale timestampFormat t
+
+timestampFormat :: String
+timestampFormat = "%b %e %H:%M:%S"

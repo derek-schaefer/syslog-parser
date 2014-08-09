@@ -1,5 +1,6 @@
 module Text.Syslog
-    ( Severity(..)
+    ( SyslogEvent(..)
+    , Severity(..)
     , Facility(..)
     , module RFC3164
     ) where
