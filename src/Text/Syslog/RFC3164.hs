@@ -95,7 +95,7 @@ headerStr :: Header -> T.Text
 headerStr h = foldl1 T.append [T.pack $ timestampStr $ timestamp h, " ", host h, " "]
 
 contentStr :: Content -> T.Text
-contentStr c = foldl1 T.append [t, p, ": ", message c]
+contentStr c = foldl1 T.append [t, p, ":", message c]
     where t = maybe T.empty id (tag c)
           p = maybe T.empty (\p -> foldl1 T.append ["[", T.pack $ show p, "]"]) (pid c)
 
