@@ -23,8 +23,8 @@ executable syslog-parser
                        old-locale
 
 library
-  exposed-modules:     Text.Syslog
-  other-modules:       Text.Syslog.Types,
+  exposed-modules:     Text.Syslog,
+                       Text.Syslog.Types,
                        Text.Syslog.RFC3164
   hs-source-dirs:      src
   default-language:    Haskell2010

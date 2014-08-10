@@ -6,4 +6,4 @@ module Text.Syslog
     ) where
 
 import Text.Syslog.Types
-import Text.Syslog.RFC3164 as RFC3164
+import qualified Text.Syslog.RFC3164 as RFC3164
