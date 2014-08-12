@@ -12,6 +12,7 @@ import Text.Syslog.Types
 import Control.Applicative
 import Data.Attoparsec.Text
 import Data.Maybe
+import Data.Text (Text)
 import qualified Data.Text as T
 import Data.Time
 import Data.Time.Format
@@ -30,13 +31,13 @@ data Priority = Priority
 
 data Header = Header
     { timestamp :: UTCTime
-    , host :: T.Text
+    , host :: Text
     } deriving (Show, Read, Eq)
 
 data Content = Content
-    { tag :: Maybe T.Text
+    { tag :: Maybe Text
     , pid :: Maybe Int
-    , message :: T.Text
+    , message :: Text
     } deriving (Show, Read, Eq)
 
 instance SyslogEvent Event where
@@ -84,21 +85,21 @@ readFacility pri = toEnum $ pri `div` 8
 readSeverity :: Int -> Severity
 readSeverity pri = toEnum $ pri `mod` 8
 
-priorityStr :: Priority -> T.Text
+priorityStr :: Priority -> Text
 priorityStr p = foldl1 T.append ["<", T.pack $ show (f + s), ">"]
     where f = fromEnum (facility p) * 8
           s = fromEnum (severity p)
 
-headerStr :: Header -> T.Text
+headerStr :: Header -> Text
 headerStr h = foldl1 T.append [T.pack $ timestampStr $ timestamp h, " ", host h, " "]
 
-contentStr :: Content -> T.Text
+contentStr :: Content -> Text
 contentStr c = foldl1 T.append [t, p, ":", message c]
     where t = maybe T.empty id (tag c)
           p = maybe T.empty (\p -> foldl1 T.append ["[", T.pack $ show p, "]"]) (pid c)
 
-timestampStr :: UTCTime -> String
-timestampStr t = formatTime defaultTimeLocale timestampFormat t
-
 timestampFormat :: String
 timestampFormat = "%b %e %H:%M:%S"
+
+timestampStr :: UTCTime -> String
+timestampStr t = formatTime defaultTimeLocale timestampFormat t
