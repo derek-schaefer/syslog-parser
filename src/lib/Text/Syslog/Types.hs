@@ -4,7 +4,7 @@ import qualified Data.Text as T
 
 class SyslogEvent e where
     readEvent :: T.Text -> Maybe e
-    showEvent :: e      -> T.Text
+    showEvent :: e -> T.Text
 
 data Severity = Emergency
               | Alert
@@ -20,18 +20,18 @@ data Facility = Kern
               | User
               | Mail
               | Daemon
-              | Auth0
+              | Auth
               | Internal
               | Lpr
               | News
               | Uucp
-              | Cron
-              | Auth1
+              | Clock
+              | AuthPriv
               | Ftp
               | Ntp
               | LogAudit
               | LogAlert
-              | Clock
+              | Cron
               | Local0
               | Local1
               | Local2

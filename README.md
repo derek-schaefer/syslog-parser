@@ -18,7 +18,7 @@ parseEvent "<34>Oct 11 22:14:15 mymachine su: 'su root' failed for lonvick on /d
 ```haskell
 Event {
   priority = Priority {
-    facility = Auth0,
+    facility = Auth,
     severity = Critical
   },
   header = Header {
