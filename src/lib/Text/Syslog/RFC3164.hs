@@ -10,10 +10,9 @@ module Text.Syslog.RFC3164
 import Text.Syslog.Types
 
 import Control.Applicative
-import Data.Attoparsec.Text
+import Data.Attoparsec.ByteString.Char8
+import qualified Data.ByteString.Char8 as B
 import Data.Maybe
-import Data.Text (Text)
-import qualified Data.Text as T
 import Data.Time
 import Data.Time.Format
 import System.Locale
@@ -31,19 +30,19 @@ data Priority = Priority
 
 data Header = Header
     { timestamp :: UTCTime
-    , host :: Text
+    , host :: B.ByteString
     } deriving (Show, Read, Eq)
 
 data Content = Content
-    { tag :: Maybe Text
+    { tag :: Maybe B.ByteString
     , pid :: Maybe Int
-    , message :: Text
+    , message :: B.ByteString
     } deriving (Show, Read, Eq)
 
 instance SyslogEvent Event where
     readEvent src = either (\_ -> Nothing) Just ee
         where ee = parseOnly parseEvent src
-    showEvent e = foldl1 T.append [pri, hdr, cnt]
+    showEvent e = foldl1 B.append [pri, hdr, cnt]
         where pri = priorityStr (priority e)
               hdr = headerStr (header e)
               cnt = contentStr (content e)
@@ -70,7 +69,7 @@ parseContent :: Parser Content
 parseContent = do
   tag' <- Just <$> (char ' ' *> takeTill (`elem` ":[")) <|> pure Nothing
   pid' <- Just <$> (char '[' *> decimal <* string "]:") <|> (char ':' *> pure Nothing)
-  msg  <- takeText
+  msg  <- takeByteString
   return $ Content tag' pid' msg
 
 parseTimestamp :: Parser UTCTime
@@ -85,18 +84,18 @@ readFacility pri = toEnum $ pri `div` 8
 readSeverity :: Int -> Severity
 readSeverity pri = toEnum $ pri `mod` 8
 
-priorityStr :: Priority -> Text
-priorityStr p = foldl1 T.append ["<", T.pack $ show (f + s), ">"]
+priorityStr :: Priority -> B.ByteString
+priorityStr p = foldl1 B.append ["<", B.pack $ show (f + s), ">"]
     where f = fromEnum (facility p) * 8
           s = fromEnum (severity p)
 
-headerStr :: Header -> Text
-headerStr h = foldl1 T.append [T.pack $ timestampStr $ timestamp h, " ", host h, " "]
+headerStr :: Header -> B.ByteString
+headerStr h = foldl1 B.append [B.pack $ timestampStr $ timestamp h, " ", host h, " "]
 
-contentStr :: Content -> Text
-contentStr c = foldl1 T.append [t, p, ":", message c]
-    where t = maybe T.empty id (tag c)
-          p = maybe T.empty (\p -> foldl1 T.append ["[", T.pack $ show p, "]"]) (pid c)
+contentStr :: Content -> B.ByteString
+contentStr c = foldl1 B.append [t, p, ":", message c]
+    where t = maybe B.empty id (tag c)
+          p = maybe B.empty (\p -> foldl1 B.append ["[", B.pack $ show p, "]"]) (pid c)
 
 timestampFormat :: String
 timestampFormat = "%b %e %H:%M:%S"

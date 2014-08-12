@@ -1,11 +1,10 @@
 module Text.Syslog.Types where
 
-import Data.Text (Text)
-import qualified Data.Text as T
+import qualified Data.ByteString.Char8 as B
 
 class SyslogEvent e where
-    readEvent :: Text -> Maybe e
-    showEvent :: e -> Text
+    readEvent :: B.ByteString -> Maybe e
+    showEvent :: e -> B.ByteString
 
 data Severity = Emergency
               | Alert
