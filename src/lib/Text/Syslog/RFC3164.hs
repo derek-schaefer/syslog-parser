@@ -12,9 +12,7 @@ import Text.Syslog.Types
 import Control.Applicative
 import Data.Attoparsec.ByteString.Char8
 import qualified Data.ByteString.Char8 as B
-import Data.Maybe
 import Data.Time
-import Data.Time.Format
 import System.Locale
 
 data Event = Event
@@ -95,7 +93,7 @@ headerStr h = foldl1 B.append [B.pack $ timestampStr $ timestamp h, " ", host h,
 contentStr :: Content -> B.ByteString
 contentStr c = foldl1 B.append [t, p, ":", message c]
     where t = maybe B.empty id (tag c)
-          p = maybe B.empty (\p -> foldl1 B.append ["[", B.pack $ show p, "]"]) (pid c)
+          p = maybe B.empty (\p' -> foldl1 B.append ["[", B.pack $ show p', "]"]) (pid c)
 
 timestampFormat :: String
 timestampFormat = "%b %e %H:%M:%S"

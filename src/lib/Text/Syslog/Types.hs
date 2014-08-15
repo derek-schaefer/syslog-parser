@@ -1,4 +1,7 @@
-module Text.Syslog.Types where
+module Text.Syslog.Types
+    ( SyslogEvent(..)
+    , Severity(..), Facility(..)
+    ) where
 
 import qualified Data.ByteString.Char8 as B
 
