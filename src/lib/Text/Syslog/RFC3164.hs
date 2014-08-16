@@ -50,11 +50,7 @@ instance SyslogEvent Event where
               cnt = contentStr (content e)
 
 parseEvent :: Parser Event
-parseEvent = do
-  pri <- parsePriority
-  hdr <- parseHeader
-  cnt <- parseContent
-  return $ Event pri hdr cnt
+parseEvent = Event <$> parsePriority <*> parseHeader <*> parseContent
 
 parsePriority :: Parser Priority
 parsePriority = do
