@@ -1,6 +1,7 @@
 module Text.Syslog
     ( SyslogEvent(..)
-    , Severity(..), Facility(..)
+    , Facility(..)
+    , Severity(..)
     , readRFC3164
     ) where
 

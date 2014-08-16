@@ -3,8 +3,12 @@
 -- Specification: http://www.ietf.org/rfc/rfc3164.txt
 
 module Text.Syslog.RFC3164
-    ( Event(..), Priority(..), Header(..), Content(..)
-    , readEvent, showEvent
+    ( Event(..)
+    , Priority(..)
+    , Header(..)
+    , Content(..)
+    , readEvent
+    , showEvent
     ) where
 
 import Text.Syslog.Types

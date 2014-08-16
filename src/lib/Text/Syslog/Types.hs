@@ -1,6 +1,7 @@
 module Text.Syslog.Types
     ( SyslogEvent(..)
-    , Severity(..), Facility(..)
+    , Facility(..)
+    , Severity(..)
     ) where
 
 import qualified Data.ByteString.Char8 as B
