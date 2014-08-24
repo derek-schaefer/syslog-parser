@@ -3,21 +3,23 @@
 -- Specification: http://www.ietf.org/rfc/rfc3164.txt
 
 module Text.Syslog.RFC3164
-    ( Event(..)
+    ( SyslogEvent(..)
+    , Event(..)
     , Priority(..)
     , Header(..)
     , Content(..)
-    , readEvent
-    , showEvent
+    , readRFC3164
+    , showRFC3164
     ) where
 
 import Text.Syslog.Types
 
 import Control.Applicative
 import Data.Attoparsec.ByteString.Char8
-import qualified Data.ByteString.Char8 as B
 import Data.Time
 import System.Locale
+
+import qualified Data.ByteString.Char8 as B
 
 data Event = Event
     { priority :: Priority
@@ -42,12 +44,18 @@ data Content = Content
     } deriving (Show, Read, Eq)
 
 instance SyslogEvent Event where
-    readEvent src = either (\_ -> Nothing) Just ee
-        where ee = parseOnly parseEvent src
-    showEvent e = foldl1 B.append [pri, hdr, cnt]
-        where pri = priorityStr (priority e)
-              hdr = headerStr (header e)
-              cnt = contentStr (content e)
+    readEvent = readRFC3164
+    showEvent = showRFC3164
+
+readRFC3164 :: B.ByteString -> Maybe Event
+readRFC3164 src = case ee of { Right e -> Just e; _ -> Nothing }
+    where ee = parseOnly parseEvent src
+
+showRFC3164 :: Event -> B.ByteString
+showRFC3164 e = foldl1 B.append [pri, hdr, cnt]
+    where pri = priorityStr (priority e)
+          hdr = headerStr (header e)
+          cnt = contentStr (content e)
 
 parseEvent :: Parser Event
 parseEvent = Event <$> parsePriority <*> parseHeader <*> parseContent
