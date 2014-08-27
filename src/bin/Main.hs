@@ -1,9 +1,8 @@
 module Main where
 
-import Text.Syslog
+import Text.Log.Syslog
 
 import qualified Data.ByteString.Char8 as B
-import System.Environment
 
 main :: IO ()
 main = parseLines (\src -> readRFC3164 $ B.pack src)

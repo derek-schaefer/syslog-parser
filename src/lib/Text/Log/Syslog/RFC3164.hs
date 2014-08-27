@@ -1,8 +1,6 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 -- Specification: http://www.ietf.org/rfc/rfc3164.txt
 
-module Text.Syslog.RFC3164
+module Text.Log.Syslog.RFC3164
     ( SyslogEvent(..)
     , Event(..)
     , Priority(..)
@@ -12,7 +10,7 @@ module Text.Syslog.RFC3164
     , showRFC3164
     ) where
 
-import Text.Syslog.Types
+import Text.Log.Syslog.Types
 
 import Control.Applicative
 import Data.Attoparsec.ByteString.Char8

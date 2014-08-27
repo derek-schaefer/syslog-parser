@@ -1,4 +1,4 @@
-module Text.Syslog.Types
+module Text.Log.Syslog.Types
     ( SyslogEvent(..)
     , Facility(..)
     , Severity(..)
