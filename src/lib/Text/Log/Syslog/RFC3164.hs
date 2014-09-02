@@ -56,7 +56,10 @@ showRFC3164 e = foldl1 B.append [pri, hdr, cnt]
           cnt = contentStr (content e)
 
 parseEvent :: Parser Event
-parseEvent = Event <$> parsePriority <*> parseHeader <*> parseContent
+parseEvent = Event
+  <$> parsePriority
+  <*> parseHeader
+  <*> parseContent
 
 parsePriority :: Parser Priority
 parsePriority = do
@@ -71,9 +74,9 @@ parseHeader = do
 
 parseContent :: Parser Content
 parseContent = do
-  tag' <- Just <$> (char ' ' *> takeTill (`elem` ":[")) <|> pure Nothing
-  pid' <- Just <$> (char '[' *> decimal <* string "]:") <|> (char ':' *> pure Nothing)
-  msg  <- takeByteString
+  tag' <- Just <$> (char ' ' *> takeTill (`elem` " :[")) <|> pure Nothing
+  pid' <- Just <$> (char '[' *> decimal <* char ']') <|> pure Nothing
+  msg  <- char ':' *> takeByteString <|> takeByteString
   return $ Content tag' pid' msg
 
 parseTimestamp :: Parser UTCTime
