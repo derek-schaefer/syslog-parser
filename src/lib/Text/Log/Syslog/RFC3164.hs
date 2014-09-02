@@ -16,7 +16,6 @@ import Control.Applicative
 import Data.Attoparsec.ByteString.Char8
 import Data.Time
 import System.Locale
-
 import qualified Data.ByteString.Char8 as B
 
 data Event = Event
